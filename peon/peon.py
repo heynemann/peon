@@ -35,7 +35,11 @@ def checkSumRecurse():
 
 def main():
     val=0
-    command = " ".join(sys.argv[1:])
+    if len(sys.argv) > 1:
+        command = " ".join(sys.argv[1:])
+    else:
+        command = "nosetests"
+
     while (True):
         if checkSumRecurse() != val:
             val=checkSumRecurse()
@@ -54,7 +58,6 @@ def notify(title, message):
     if pynotify.init("Nosy"):
         n = pynotify.Notification(title, message)
         n.show()
-
 
 if __name__ == '__main__':
     sys.exit(main())

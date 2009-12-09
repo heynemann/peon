@@ -38,6 +38,8 @@ setup(
                    'Programming Language :: Python :: 2.6',
                    'Topic :: Software Development :: Quality Assurance',
                    'Topic :: Software Development :: Testing',],
+    packages=["peon",],
+    include_package_data=True,
     install_requires=[
     ],
 
