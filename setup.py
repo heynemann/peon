@@ -19,7 +19,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = 'Peon',
-    version = "0.1.0",
+    version = "0.1.1",
     description = "Peon is an auto-testing-like tool",
     long_description = """Peon works for you while you are developing.""",
     keywords = 'Testing Notify',
