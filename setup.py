@@ -19,7 +19,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = 'Peon',
-    version = "0.1.2",
+    version = "0.1.3",
     description = "Peon is an auto-testing-like tool",
     long_description = """Peon works for you while you are developing.""",
     keywords = 'Testing Notify',
@@ -40,6 +40,9 @@ setup(
                    'Topic :: Software Development :: Testing',],
     packages=["peon",],
     include_package_data=True,
+    package_data = {
+        '': ['*.png'],
+    },
     install_requires=[
     ],
 

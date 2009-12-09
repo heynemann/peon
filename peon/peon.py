@@ -20,6 +20,12 @@
 
 import sys
 import glob,os,stat,time
+from os.path import abspath, dirname, join
+
+class Urgency(object):
+    low = 0
+    normal = 1
+    critical = 2
 
 '''
 Watch for changes in all .py files. If changes, run nosetests. 
@@ -50,24 +56,31 @@ def main():
                 ret = os.system(command)
                 if ret != 0:
                     is_build_broken = True
-                    notify("Broken build", "Your command of '%s' returned exit code '%s'. Please verify the console output for more info." % (command, ret))
+                    notify("Broken build", "Your command of '%s' returned exit code '%s'. Please verify the console output for more info." % (command, ret), "stop.png", urgency=Urgency.critical)
                 else:
                     if is_build_broken:
                         is_build_broken = False
-                        notify("Build fixed", "Your build with command of '%s' IS FIXED!" % (command))
+                        notify("Build fixed", "Your build with command of '%s' IS FIXED!" % (command), "tick.png")
 
             time.sleep(1)
     except KeyboardInterrupt:
         return
 
-def notify(title, message):
+def notify(title, message, image, urgency=Urgency.normal):
     try:
         import pynotify
     except:
         return
 
+    urgencies = {
+        Urgency.low:pynotify.URGENCY_LOW,
+        Urgency.normal:pynotify.URGENCY_NORMAL,
+        Urgency.critical:pynotify.URGENCY_CRITICAL,
+    }
+
     if pynotify.init("Nosy"):
-        n = pynotify.Notification(title, message)
+        n = pynotify.Notification(title, message, abspath(join(dirname(__file__), image)))
+        n.set_urgency(urgencies[urgency])
         n.show()
 
 if __name__ == '__main__':
