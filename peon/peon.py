@@ -40,14 +40,17 @@ def main():
     else:
         command = "nosetests"
 
-    while (True):
-        if checkSumRecurse() != val:
-            val=checkSumRecurse()
-            os.system('reset')
-            ret = os.system(command)
-            if ret != 0:
-                notify("Broken build", "Your command of '%s' returned exit code '%s'. Please verify the console output for more info." % (command, ret))
-        time.sleep(1)
+    try:
+        while (True):
+            if checkSumRecurse() != val:
+                val=checkSumRecurse()
+                os.system('reset')
+                ret = os.system(command)
+                if ret != 0:
+                    notify("Broken build", "Your command of '%s' returned exit code '%s'. Please verify the console output for more info." % (command, ret))
+            time.sleep(1)
+    except KeyboardInterrupt:
+        return
 
 def notify(title, message):
     try:
