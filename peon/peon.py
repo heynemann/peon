@@ -40,6 +40,8 @@ def main():
     else:
         command = "nosetests"
 
+    is_build_broken = False
+
     try:
         while (True):
             if checkSumRecurse() != val:
@@ -47,7 +49,13 @@ def main():
                 os.system('reset')
                 ret = os.system(command)
                 if ret != 0:
+                    is_build_broken = True
                     notify("Broken build", "Your command of '%s' returned exit code '%s'. Please verify the console output for more info." % (command, ret))
+                else:
+                    if is_build_broken:
+                        is_build_broken = False
+                        notify("Build fixed", "Your build with command of '%s' IS FIXED!" % (command))
+
             time.sleep(1)
     except KeyboardInterrupt:
         return
