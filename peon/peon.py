@@ -82,6 +82,8 @@ def notify(title, message, image, urgency=Urgency.normal):
         n = pynotify.Notification(title, message, abspath(join(dirname(__file__), image)))
         n.set_urgency(urgencies[urgency])
         n.show()
+        time.sleep(2)
+        n.close()
 
 if __name__ == '__main__':
     sys.exit(main())
