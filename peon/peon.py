@@ -30,13 +30,13 @@ class Urgency(object):
 '''
 Watch for changes in all .py files. If changes, run nosetests. 
 '''
-def checkSumRecurse():
+def checkSumRecursive(directory, pattern='*.py'):
     val = 0
-    for dirpath, dirs, files in os.walk('.'):
-        for file in [file for file in files if file[-3:] == '.py']:
-            absoluteFileName = os.path.join( dirpath, file)
+    for dirpath, dirs, files in os.walk(directory):
+        for file in glob.glob(os.path.join(dirpath, pattern)):
+            absoluteFileName = os.path.join(dirpath, file)
             stats = os.stat(absoluteFileName)
-            val += stats [stat.ST_SIZE] + stats [stat.ST_MTIME]
+            val += stats[stat.ST_SIZE] + stats[stat.ST_MTIME]
     return val 
 
 def main():
@@ -50,8 +50,8 @@ def main():
 
     try:
         while (True):
-            if checkSumRecurse() != val:
-                val=checkSumRecurse()
+            if checkSumRecursive('.') != val:
+                val=checkSumRecursive('.')
                 os.system('reset')
                 ret = os.system(command)
                 if ret != 0:

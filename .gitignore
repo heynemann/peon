@@ -19,3 +19,4 @@ python-build-stamp*
 *report.html
 .coverage
 Peon.egg-info
+*.swp
