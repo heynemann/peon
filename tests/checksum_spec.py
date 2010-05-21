@@ -5,7 +5,7 @@ from peon import checkSumRecursive
 from should_dsl import *
 
 
-class CheckSumSpec(unittest.TestCase):
+class ChecksumSpec(unittest.TestCase):
 
     def setUp(self):
         env.reset()
