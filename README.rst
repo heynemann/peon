@@ -16,11 +16,11 @@ Just install using::
 Using
 -----
 
-By default Peon looks for changes in python files (`*.py`) and if no command is specified, it run `nosetests`.
+By default Peon looks for changes in python files *(\*.py)* and if no command is specified, it run *nosetests*.
 
 Peon will keep running that command whenever a file changes.
 
-For example, look the following directory tree::
+For example, take the following directory tree as example::
 
     .
     |-- Makefile
@@ -35,16 +35,16 @@ For example, look the following directory tree::
         |-- checksum_spec.py
         |-- something_has_changed_spec.py
 
-If I want peon watch for changes in all my .py files and run "make" when something changes, I could do simply::
+If I want Peon watches for changes in all my "\*.py" files and run "make" when something changes, I could do simply::
     
     $ peon make # run make in the current dir, looking for changes in *.py files
 
 
-    It is possible to specify the directory to watch (-d or --directory option):
+It is possible to specify the directory to watch (-d or --directory option)::
 
     $ peon make -d peon
 
     
-    It is possible to tell peon what is your pattern too, through -p or --patern option:
+It is possible to tell peon what is your pattern too, through -p or --patern option::
     
     $ peon make -p '*.png' -d peon
