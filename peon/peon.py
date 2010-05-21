@@ -23,10 +23,12 @@ import glob
 import os
 import stat
 import time
+import optparse
 from os.path import abspath, dirname, join
 
 
 _checksum = 0
+_pattern = None
 
 
 class Urgency(object):
@@ -55,11 +57,13 @@ def checkSumRecursive(directory, pattern='*.py'):
     return result
 
 
-def something_has_changed(dir):
+def something_has_changed(dir, pattern='*.py'):
     global _checksum
-    if _checksum == 0:
-        _checksum = checkSumRecursive(dir)
-    new_checksum = checkSumRecursive(dir)
+    global _pattern
+    if _pattern != pattern:
+        _pattern = pattern
+        _checksum = checkSumRecursive(dir, _pattern)
+    new_checksum = checkSumRecursive(dir, _pattern)
     if new_checksum != _checksum:
         _checksum = new_checksum
         return True
@@ -72,13 +76,21 @@ def main():
     by default it looks for '*.py'.
     If something has changes, run a given command or nosetests.
     '''
-    val = 0
-    command = " ".join(sys.argv[1:]) or 'nosetests'
+    parser = optparse.OptionParser()
+    parser.add_option('-d', '--dir', default='.', dest='directory',
+                      help='the directory peon will watch for changes')
+    parser.add_option('-p', '--pattern', default='*.py', dest='pattern',
+                      help='the glob pattern to watch for changes. '\
+                            '(default is "*.py)"')
+    options, args = parser.parse_args()
+    directory = options.directory
+    pattern = options.pattern
+    command = ' '.join(args) or 'nosetests'
     is_build_broken = False
 
     try:
         while True:
-            if something_has_changed('.'):
+            if something_has_changed(directory, pattern):
                 os.system('reset')
                 status = os.system(command)
                 if status != 0:

@@ -12,8 +12,15 @@ class CheckIfSomethingHasChanged(unittest.TestCase):
 
     def should_be_true_if_there_are_changes_and_false_if_not(self):
         before = something_has_changed(TEST_OUTPUT_DIR)
-        env.writefile('lol.py', 'lol')
+        env.writefile('dummy.py', 'dummy')
         after = something_has_changed(TEST_OUTPUT_DIR)
+        after |should_be| True
+        before |should_be| False
+
+    def should_be_possible_to_pass_patterns(self):
+        before = something_has_changed(TEST_OUTPUT_DIR, pattern='*.ext')
+        env.writefile('myfile.ext', 'my text')
+        after = something_has_changed(TEST_OUTPUT_DIR, pattern='*.ext')
         after |should_be| True
         before |should_be| False
 
