@@ -50,20 +50,20 @@ def _get_checksum_from_dir(dirpath, pattern):
     return result
 
 
-def checkSumRecursive(directory, pattern='*.py'):
+def checksum_recursively(directory, pattern):
     result = 0
     for dirpath, dirs, files in os.walk(directory):
         result += _get_checksum_from_dir(dirpath, pattern)
     return result
 
 
-def something_has_changed(dir, pattern='*.py'):
+def something_has_changed(dir, pattern):
     global _checksum
     global _pattern
     if _pattern != pattern:
         _pattern = pattern
-        _checksum = checkSumRecursive(dir, _pattern)
-    new_checksum = checkSumRecursive(dir, _pattern)
+        _checksum = checksum_recursively(dir, _pattern)
+    new_checksum = checksum_recursively(dir, _pattern)
     if new_checksum != _checksum:
         _checksum = new_checksum
         return True
@@ -72,9 +72,10 @@ def something_has_changed(dir, pattern='*.py'):
 
 def main():
     '''
-    Watch for changes in all files indicated by a glob pattern,
-    by default it looks for '*.py'.
-    If something has changes, run a given command or nosetests.
+    Watch for changes in files that match the pattern in a directory.
+    Default dir is '.' and default pattern is '*.py'.
+    Whenever a change to any matched file in directory happens, peon runs
+    the command specified or nosetests by default
     '''
     parser = optparse.OptionParser()
     parser.add_option('-d', '--dir', default='.', dest='directory',
