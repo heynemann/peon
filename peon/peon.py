@@ -27,34 +27,35 @@ class Urgency(object):
     normal = 1
     critical = 2
 
+def _get_checksum_from_dir(dirpath, pattern):
+    result = 0
+    for file in glob.glob(os.path.join(dirpath, pattern)):
+        absoluteFileName = os.path.join(dirpath, file)
+        stats = os.stat(absoluteFileName)
+        result += stats[stat.ST_SIZE] + stats[stat.ST_MTIME]
+    return result
+
 '''
 Watch for changes in all .py files. If changes, run nosetests. 
 '''
 def checkSumRecursive(directory, pattern='*.py'):
-    val = 0
+    result = 0
     for dirpath, dirs, files in os.walk(directory):
-        for file in glob.glob(os.path.join(dirpath, pattern)):
-            absoluteFileName = os.path.join(dirpath, file)
-            stats = os.stat(absoluteFileName)
-            val += stats[stat.ST_SIZE] + stats[stat.ST_MTIME]
-    return val 
+        result += _get_checksum_from_dir(dirpath, pattern)
+    return result
 
 def main():
-    val=0
-    if len(sys.argv) > 1:
-        command = " ".join(sys.argv[1:])
-    else:
-        command = "nosetests"
-
+    val = 0
+    command = " ".join(sys.argv[1:]) or 'nosetests'
     is_build_broken = False
 
     try:
         while (True):
             if checkSumRecursive('.') != val:
-                val=checkSumRecursive('.')
+                val = checkSumRecursive('.')
                 os.system('reset')
-                ret = os.system(command)
-                if ret != 0:
+                status = os.system(command)
+                if status != 0:
                     is_build_broken = True
                     notify("Broken build", "Your command of '%s' returned exit code '%s'. Please verify the console output for more info." % (command, ret), "stop.png", urgency=Urgency.critical)
                 else:
