@@ -26,6 +26,9 @@ import time
 from os.path import abspath, dirname, join
 
 
+_checksum = 0
+
+
 class Urgency(object):
     low = 0
     normal = 1
@@ -52,6 +55,17 @@ def checkSumRecursive(directory, pattern='*.py'):
     return result
 
 
+def something_has_changed(dir):
+    global _checksum
+    if _checksum == 0:
+        _checksum = checkSumRecursive(dir)
+    new_checksum = checkSumRecursive(dir)
+    if new_checksum != _checksum:
+        _checksum = new_checksum
+        return True
+    return False
+
+
 def main():
     '''
     Watch for changes in all files indicated by a glob pattern,
@@ -64,8 +78,7 @@ def main():
 
     try:
         while True:
-            if checkSumRecursive('.') != val:
-                val = checkSumRecursive('.')
+            if something_has_changed('.'):
                 os.system('reset')
                 status = os.system(command)
                 if status != 0:
