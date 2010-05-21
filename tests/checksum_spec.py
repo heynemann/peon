@@ -6,6 +6,7 @@ from should_dsl import *
 
 
 class CheckSumSpec(unittest.TestCase):
+
     def setUp(self):
         env.reset()
 
@@ -17,14 +18,14 @@ class CheckSumSpec(unittest.TestCase):
 
         first_checksum |should_be.less_than| second_checksum
 
-
     def should_find_python_files_in_subdirs(self):
         env.mkdir('foo')
         env.mkdir('foo/bar')
+        foo_path = os.path.join(TEST_OUTPUT_DIR, 'foo')
         env.writefile('foo/bar/lol.py', 'lol')
-        first_checksum = checkSumRecursive(os.path.join(TEST_OUTPUT_DIR, 'foo'))
+        first_checksum = checkSumRecursive(foo_path)
         env.writefile('foo/bar/lol.py', 'lol\nlol again')
-        second_checksum = checkSumRecursive(os.path.join(TEST_OUTPUT_DIR, 'foo'))
+        second_checksum = checkSumRecursive(foo_path)
 
         first_checksum |should_be.less_than| second_checksum
 
@@ -35,5 +36,3 @@ class CheckSumSpec(unittest.TestCase):
         second_checksum = checkSumRecursive(TEST_OUTPUT_DIR, pattern='*.foo')
 
         first_checksum |should_be.less_than| second_checksum
-
-
