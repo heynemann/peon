@@ -1,3 +1,5 @@
 prune dist
 prune build
 recursive-include peon *.png
+include *.rst
+include Makefile
