@@ -36,3 +36,10 @@ class ChecksumSpec(unittest.TestCase):
         second_checksum = checkSumRecursive(TEST_OUTPUT_DIR, pattern='*.foo')
 
         first_checksum |should_be.less_than| second_checksum
+
+    def should_find_files_by_relative_paths(self):
+        env.writefile('lol.foo', 'lol')
+        first_checksum = checkSumRecursive('tests/test-output', pattern='*.foo')
+        env.writefile('lol.foo', 'lol\nlol again')
+        second_checksum = checkSumRecursive(TEST_OUTPUT_DIR, pattern='*.foo')
+

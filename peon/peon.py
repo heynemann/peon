@@ -43,7 +43,7 @@ def _get_stats_from_filename(filename):
 def _get_checksum_from_dir(dirpath, pattern):
     result = 0
     for file in glob.glob(os.path.join(dirpath, pattern)):
-        absolute_filename = os.path.join(dirpath, file)
+        absolute_filename = os.path.abspath(file)
         result += _get_stats_from_filename(absolute_filename)
     return result
 
