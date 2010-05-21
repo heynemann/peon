@@ -11,9 +11,9 @@ class CheckIfSomethingHasChanged(unittest.TestCase):
         env.reset()
 
     def should_be_true_if_there_are_changes_and_false_if_not(self):
-        before = something_has_changed(TEST_OUTPUT_DIR)
+        before = something_has_changed(TEST_OUTPUT_DIR, '*.py')
         env.writefile('dummy.py', 'dummy')
-        after = something_has_changed(TEST_OUTPUT_DIR)
+        after = something_has_changed(TEST_OUTPUT_DIR, '*.py')
         after |should_be| True
         before |should_be| False
 
