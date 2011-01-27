@@ -92,7 +92,10 @@ def main():
     try:
         while True:
             if something_has_changed(directory, pattern):
-                os.system('reset')
+                if sys.platform == 'win32':
+                    os.system('cls')
+                else:
+                    os.system('reset')
                 status = os.system(command)
                 if status != 0:
                     is_build_broken = True
