@@ -48,3 +48,8 @@ It is possible to specify the directory to watch (-d or --directory option)::
 It is possible to tell peon what is your pattern too, through -p or --patern option::
     
     $ peon make -p '*.png' -d peon
+
+
+If you do not want peon to reset/clear your terminal before each run, you may use the --no-reset option::
+
+    $ peon make --no-reset
