@@ -83,19 +83,24 @@ def main():
     parser.add_option('-p', '--pattern', default='*.py', dest='pattern',
                       help='the glob pattern to watch for changes. '\
                             '(default is "*.py)"')
+    parser.add_option('--no-reset', default=True, dest='reset', action="store_false", 
+                      help='do not clear the screen between runs. '\
+                            '(default is True)')
     options, args = parser.parse_args()
     directory = options.directory
     pattern = options.pattern
+    reset = options.reset
     command = ' '.join(args) or 'nosetests'
     is_build_broken = False
 
     try:
         while True:
             if something_has_changed(directory, pattern):
-                if sys.platform == 'win32':
-                    os.system('cls')
-                else:
-                    os.system('reset')
+                if reset:
+                    if sys.platform == 'win32':
+                        os.system('cls')
+                    else:
+                        os.system('reset')
                 status = os.system(command)
                 if status != 0:
                     is_build_broken = True
