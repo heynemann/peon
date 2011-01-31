@@ -69,6 +69,13 @@ def something_has_changed(dir, pattern):
         return True
     return False
 
+    
+def clear_screen():
+    if sys.platform == 'win32':
+        os.system('cls')
+    else:
+        os.system('reset')
+
 
 def main():
     '''
@@ -97,10 +104,7 @@ def main():
         while True:
             if something_has_changed(directory, pattern):
                 if reset:
-                    if sys.platform == 'win32':
-                        os.system('cls')
-                    else:
-                        os.system('reset')
+                    clear_screen()
                 status = os.system(command)
                 if status != 0:
                     is_build_broken = True
